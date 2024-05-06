@@ -37,3 +37,5 @@ class PreferenceDB {
     return res
   }
 }
+
+export default new PreferenceDB()
