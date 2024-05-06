@@ -1,14 +1,21 @@
-import relationalStore from '@ohos.data.relationalStore'
-import Logger from '../utils/Logger';
-
-// DB 工具类
+import relationalStore from '@ohos.data.relationalStore';
+import Logger from '../utils/Logger'
+import CommonConstants from '../constants/CommonConsts'
 
 export default class TaskDB {
   private rdbStore: relationalStore.RdbStore | null = null
-  private sqlCreateTable: string
   private tableName: string
+  private sqlCreateTable: string
+  private columns: Array<string>
   private RDB_TAG: string = '[DEBUG_RDB]'
   private StoreConfig: relationalStore.StoreConfig
+
+  constructor(tableName: string, sqlCreateTable: string, columns: Array<string>, Config: relationalStore.StoreConfig = CommonConstants.STORE_CONFIG) {
+    this.tableName = tableName
+    this.sqlCreateTable = sqlCreateTable
+    this.columns = columns
+    this.StoreConfig = Config
+  }
 
   getRdbStore(callback: Function = () => {
   }) {
@@ -32,13 +39,21 @@ export default class TaskDB {
       callback();
     })
   }
-
   // 添加一列
   updateColumns(newColumn: string, newColumnData: string) {
     this.rdbStore.executeSql(`ALTER TABLE ${this.tableName} ADD COLUMN ${newColumn} ${newColumnData}`)
   }
 
-  // 插入数据
+  // test() {
+  //   let vb: relationalStore.ValuesBucket = {
+  //     id: 1,
+  //     task_name: "123",
+  //     subject: 2
+  //   }
+  //   this.rdbStore.insert('cateTable', vb, (err, ret) => {
+  //     Logger.debug(`Test Error: ${(JSON).stringify(err)}, ret = ${ret}`)
+  //   })
+  // }
   insertData(data: relationalStore.ValuesBucket, callback: Function = () => {
   }) {
     if (!callback || typeof callback === 'undefined' || callback === undefined) {
@@ -60,7 +75,6 @@ export default class TaskDB {
     }
   }
 
-  // 删除
   deleteData(predicates: relationalStore.RdbPredicates, callback: Function = () => {
   }) {
     if (!callback || typeof callback === 'undefined' || callback === undefined) {
@@ -80,10 +94,8 @@ export default class TaskDB {
     }
   }
 
-  // 修改数据
   updateData(predicates: relationalStore.RdbPredicates, data: relationalStore.ValuesBucket, callback: Function = () => {
   }) {
-    // 根据RdbPredicates 指定的实例对象更新数据库中的数据
     if (!callback || typeof callback === 'undefined' || callback === undefined) {
       Logger.info(this.RDB_TAG, 'updateDate() has no callback!');
       return;
@@ -102,7 +114,6 @@ export default class TaskDB {
     }
   }
 
-  // 查询数据
   query(predicates: relationalStore.RdbPredicates, callback: Function = () => {
   }) {
     if (!callback || typeof callback === 'undefined' || callback === undefined) {
