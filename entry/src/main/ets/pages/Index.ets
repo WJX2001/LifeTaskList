@@ -6,7 +6,6 @@ import Logger from '../common/utils/Logger'
 @Entry
 @Component
 struct Index {
-
   async aboutToAppear() {
     await PreferenceDB.getPreferenceStorage()
     // 获取初次打开标签
@@ -30,6 +29,13 @@ struct Index {
           console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
         }
       })
+    } else {
+      let last_columns: string[] = JSON.parse(await PreferenceDB.getPreference('nowVerColumn'))
+      if (last_columns.length == CommonConstants.TASK_TABLE_INIT.columns.length) {
+        Logger.debug(`PrefDB: TaskTable Columns up to date`)
+      } else {
+
+      }
     }
   }
 
