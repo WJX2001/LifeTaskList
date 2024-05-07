@@ -60,11 +60,12 @@ export default class TaskTable {
     // this.query_dup(task_name, callback, isAll)
   }
   // supports multiple type all-in-one
+  // 数据库查询
   basic_query(query_type: string, queryData: TaskListItemData, callback: Function, isAll: boolean = true) {
     Logger.debug(`TaskTable query_type: ${query_type}, query_data: ${JSON.stringify(queryData)}, visit: ${queryData[query_type]}`)
     let predicates = new relationalStore.RdbPredicates(CommonConstants.TASK_TABLE_INIT.tableName)
     if (!isAll) {
-      if (CommonConstants.COLUMN_TYPE[query_type] == 'string') predicates.like(query_type, queryData[query_type])
+        if (CommonConstants.COLUMN_TYPE[query_type] == 'string') predicates.like(query_type, queryData[query_type])
       else predicates.equalTo(query_type, queryData[query_type])
     }
     this.taskTable.query(predicates, (resultSet: relationalStore.ResultSet) => {

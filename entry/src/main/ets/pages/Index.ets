@@ -1,24 +1,30 @@
 import router from '@ohos.router'
+import PreferenceData from '../common/bean/PreferenceData'
+import TaskCategoryData from '../common/bean/TaskCategoryData'
+import { TaskListItemData } from '../common/bean/TaskListItemData'
 import CommonConstants from '../common/constants/CommonConsts'
 import CommonUI from '../common/constants/CommonUIConstants'
+import CategoryTable from '../common/database/CategoryTable'
 import PreferenceDB from '../common/database/PreferenceDB'
 import TaskTable from '../common/database/TaskTable'
 import Logger from '../common/utils/Logger'
+import DDLState from '../components/IndexTabPages/DDLState'
 import { Settings } from '../components/IndexTabPages/Settings'
 import TaskList from '../components/IndexTabPages/TaskList'
 
 @Entry
 @Component
 struct Index {
+  @State message: string = 'Hello World'
   @State currentIndex: number = 0
-  // 任务列表展示
-  @State taskList: String[] = []
-
-  @State taskTable: TaskTable = new TaskTable(() => {});
-
-
-  // 多标题栏展示
-  private controller: TabsController = new TabsController()
+  @State taskList: Array<TaskListItemData> = []
+  @State categoryList: Array<TaskCategoryData> = []
+  @State taskTable: TaskTable = new TaskTable(() => {
+  });
+  @State categoryTable: CategoryTable = new CategoryTable(() => {
+  })
+  @State prefData: PreferenceData = new PreferenceData()
+  private controller: TabsController = new TabsController();
 
   // 用于底部三个功能栏目的分类：清单、截止时间、设置
   @Builder TabBuilder(title: string, targetIndex: number, selectedImg: Resource, normalImg: Resource) {
@@ -78,17 +84,57 @@ struct Index {
         })
       }
     }
+    this.categoryTable.getRdbStore(() => {
+      this.categoryTable.query(0, (res) => {
+        // first-time
+        if (res.length == 0) {
+          Logger.debug('first install, loading Category')
+          let newData = new TaskCategoryData()
+          this.categoryTable.insertData(newData, (id) => {
+            newData.id = id
+            this.categoryList.push(newData)
+          })
+        } else res.forEach((value) => {
+          this.categoryList.push(value)
+        })
+
+        this.taskTable.getRdbStore(() => {
+          this.taskTable.queryTaskName('', (result: TaskListItemData[]) => {
+            result.sort((a, b) => {
+              return Number(b.topped == true ? 2 : 0) - Number(a.topped == true ? 2 : 0)
+            })
+            this.taskList = result
+            for (let i = 0; i < this.taskList.length; ++i) {
+              this.taskList[i].setAll(this.categoryList)
+            }
+            Logger.debug(`TaskListItemData = ${JSON.stringify(this.taskList)}`)
+          }, true)
+        })
+
+      })
+    })
+  }
+
+  pageTransition() {
+    PageTransitionExit({ type: RouteType.Push, duration: 500, curve: Curve.Ease })
+      .slide(SlideEffect.Left)
   }
 
   build() {
     Column() {
       Tabs({ barPosition: BarPosition.End, controller: this.controller }) {
         TabContent() {
-          TaskList()
+          TaskList({
+            taskList: $taskList,
+            taskTable: $taskTable,
+            prefData: $prefData,
+            categoryList: $categoryList,
+            categoryTable: $categoryTable
+          })
         }.tabBar(this.TabBuilder("清单", 0, $r('app.media.ic_public_home_filled'), $r('app.media.ic_public_home')))
 
         TabContent() {
-
+          DDLState({tasks: $taskList, categoryList: $categoryList})
         }
         .tabBar(this.TabBuilder("截止时间", 1, $r('app.media.ic_public_time_filled'), $r('app.media.ic_public_time')))
 
