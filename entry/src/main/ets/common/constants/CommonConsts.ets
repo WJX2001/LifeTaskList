@@ -8,4 +8,19 @@ export default class CommonConstants {
     'is_completed BOOLEAN, detail TEXT, ddl_detail TEXT, category INTEGER, topped BOOLEAN)',
     columns: ['id', 'due_date_stamp', 'start_date_stamp', 'subject', 'detail', 'task_name', 'is_completed', 'ddl_detail', 'category', 'topped']
   }
+
+
+  static readonly COLUMN_TYPE = {
+    id: 'double',
+    due_date_stamp: 'double',
+    start_date_stamp: 'double',
+    category: 'double',
+    subject: 'string',
+    detail: 'string',
+    task_name: 'string',
+    is_completed: 'boolean',
+    ddl_detail: 'string',
+    topped: 'boolean',
+  }
+
 }

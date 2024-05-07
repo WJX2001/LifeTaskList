@@ -2,6 +2,7 @@ import router from '@ohos.router'
 import CommonConstants from '../common/constants/CommonConsts'
 import CommonUI from '../common/constants/CommonUIConstants'
 import PreferenceDB from '../common/database/PreferenceDB'
+import TaskTable from '../common/database/TaskTable'
 import Logger from '../common/utils/Logger'
 import { Settings } from '../components/IndexTabPages/Settings'
 
@@ -11,6 +12,10 @@ struct Index {
   @State currentIndex: number = 0
   // 任务列表展示
   @State taskList: String[] = []
+
+  @State taskTable: TaskTable = new TaskTable(() => {});
+
+
   // 多标题栏展示
   private controller: TabsController = new TabsController()
 
@@ -56,24 +61,32 @@ struct Index {
           console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
         }
       })
+    } else {
+      let last_columns: string[] = JSON.parse(await PreferenceDB.getPreference('nowVerColumn'))
+      if (last_columns.length == CommonConstants.TASK_TABLE_INIT.columns.length) {
+        Logger.debug(`PrefDB: TaskTable Columns up to date`)
+      } else {
+        this.taskTable.getRdbStore(() => {
+          CommonConstants.TASK_TABLE_INIT.columns.forEach((column) => {
+            if (last_columns.indexOf(column) == -1) {
+              Logger.debug(`PrefDB: New Column detected: ${column}`)
+              this.taskTable.updateColumns(column, CommonConstants.COLUMN_TYPE[column])
+            }
+          })
+        })
+      }
     }
-    // else {
-    //   let last_columns: string[] = JSON.parse(await PreferenceDB.getPreference('nowVerColumn'))
-    //   if (last_columns.length == CommonConstants.TASK_TABLE_INIT.columns.length) {
-    //     Logger.debug(`PrefDB: TaskTable Columns up to date`)
-    //   } else {
-    //
-    //   }
-    // }
   }
 
   build() {
     Column() {
       Tabs({ barPosition: BarPosition.End, controller: this.controller }) {
         TabContent() {
+
         }.tabBar(this.TabBuilder("清单", 0, $r('app.media.ic_public_home_filled'), $r('app.media.ic_public_home')))
 
         TabContent() {
+
         }
         .tabBar(this.TabBuilder("截止时间", 1, $r('app.media.ic_public_time_filled'), $r('app.media.ic_public_time')))
 

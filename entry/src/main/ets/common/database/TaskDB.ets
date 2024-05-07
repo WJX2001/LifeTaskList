@@ -44,16 +44,6 @@ export default class TaskDB {
     this.rdbStore.executeSql(`ALTER TABLE ${this.tableName} ADD COLUMN ${newColumn} ${newColumnData}`)
   }
 
-  // test() {
-  //   let vb: relationalStore.ValuesBucket = {
-  //     id: 1,
-  //     task_name: "123",
-  //     subject: 2
-  //   }
-  //   this.rdbStore.insert('cateTable', vb, (err, ret) => {
-  //     Logger.debug(`Test Error: ${(JSON).stringify(err)}, ret = ${ret}`)
-  //   })
-  // }
   insertData(data: relationalStore.ValuesBucket, callback: Function = () => {
   }) {
     if (!callback || typeof callback === 'undefined' || callback === undefined) {
