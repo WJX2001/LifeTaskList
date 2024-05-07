@@ -5,6 +5,7 @@ import PreferenceDB from '../common/database/PreferenceDB'
 import TaskTable from '../common/database/TaskTable'
 import Logger from '../common/utils/Logger'
 import { Settings } from '../components/IndexTabPages/Settings'
+import TaskList from '../components/IndexTabPages/TaskList'
 
 @Entry
 @Component
@@ -68,6 +69,7 @@ struct Index {
       } else {
         this.taskTable.getRdbStore(() => {
           CommonConstants.TASK_TABLE_INIT.columns.forEach((column) => {
+            // 如果缺少某一个字段 则需要补充完整
             if (last_columns.indexOf(column) == -1) {
               Logger.debug(`PrefDB: New Column detected: ${column}`)
               this.taskTable.updateColumns(column, CommonConstants.COLUMN_TYPE[column])
@@ -82,7 +84,7 @@ struct Index {
     Column() {
       Tabs({ barPosition: BarPosition.End, controller: this.controller }) {
         TabContent() {
-
+          TaskList()
         }.tabBar(this.TabBuilder("清单", 0, $r('app.media.ic_public_home_filled'), $r('app.media.ic_public_home')))
 
         TabContent() {
