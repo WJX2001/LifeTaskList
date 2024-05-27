@@ -109,6 +109,7 @@ export default struct CategoryListDialog {
             if (this.isEditing) {
               if (this.deleteTarget.length == this.categoryList.length) {
                 promptAction.showToast({message: `请留下至少一个清单`})
+                return
               }
               this.deleteTarget.forEach((value) => {
                 if (!this.safeDeleteCheckID(value.id)) {

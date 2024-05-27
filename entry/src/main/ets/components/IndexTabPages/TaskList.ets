@@ -308,7 +308,7 @@ export default struct TaskList {
           }.height('100%')
         }
         .titleMode(NavigationTitleMode.Full)
-        .title('作业清单')
+        .title('待办事项')
         .menus([{
           value: "",
           icon: '../../../resources/base/media/ic_public_folder.svg',

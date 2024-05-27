@@ -27,7 +27,7 @@ struct About {
               .height(80)
               .margin({bottom: 20})
               .borderRadius(16)
-            this.LongText('作业清单 Alpha 版')
+            this.LongText('生活助手 Alpha 版')
             this.LongText('由 WangJX 开发')
           }
           Column() {

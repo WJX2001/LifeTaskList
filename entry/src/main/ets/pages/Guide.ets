@@ -39,13 +39,13 @@ class dataSource implements IDataSource {
 @Component
 struct Guide {
   private guideResource: dataSource = new dataSource([
-    { id: '欢迎使用作业清单', imgPath: 'oobe/o1.png' },
+    { id: '欢迎使用生活助手', imgPath: 'oobe/o1.png' },
     { id: '点击右下角加号新建第一个待办', imgPath: 'oobe/o2.png' },
     { id: '在这里可以填写待办信息', imgPath: 'oobe/o3.png' },
     { id: '长按待办标记为重要', imgPath: 'oobe/o6.png' },
     { id: '截止时间页面\n让您的待办信息一目了然', imgPath: 'oobe/o4.png' },
     { id: '通过待办清单进行分类管理', imgPath: 'oobe/o5.png' },
-    { id: '开始使用作业清单', imgPath: 'oobe/o1.png' },
+    { id: '开始使用生活助手', imgPath: 'oobe/o1.png' },
   ])
 
   // 图片上方的文字

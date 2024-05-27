@@ -8,6 +8,7 @@ import CategoryTable from '../common/database/CategoryTable'
 import PreferenceDB from '../common/database/PreferenceDB'
 import TaskTable from '../common/database/TaskTable'
 import Logger from '../common/utils/Logger'
+import { AIComp } from '../components/IndexTabPages/AIComp'
 import DDLState from '../components/IndexTabPages/DDLState'
 import { Settings } from '../components/IndexTabPages/Settings'
 import TaskList from '../components/IndexTabPages/TaskList'
@@ -139,9 +140,14 @@ struct Index {
         .tabBar(this.TabBuilder("截止时间", 1, $r('app.media.ic_public_time_filled'), $r('app.media.ic_public_time')))
 
         TabContent() {
+          AIComp()
+        }
+        .tabBar(this.TabBuilder("AI助手", 2, $r('app.media.icon_message'), $r('app.media.icon_message')))
+
+        TabContent() {
           Settings()
         }
-        .tabBar(this.TabBuilder("设置", 2, $r('app.media.ic_public_settings_filled'), $r('app.media.ic_public_settings')))
+        .tabBar(this.TabBuilder("设置", 3, $r('app.media.ic_public_settings_filled'), $r('app.media.ic_public_settings')))
       }.onChange((index: number) => {
         // future_TODO: animation
         this.currentIndex = index
