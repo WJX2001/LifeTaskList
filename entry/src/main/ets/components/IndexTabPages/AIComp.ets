@@ -32,16 +32,46 @@ export struct AIComp {
             this.settingsListItem('自动问答')
           }
           .listItemStyle()
+          .onClick(() => {
+            // future_todo: animation
+            router.pushUrl({
+              url: "pages/AiChatComp"
+            }, router.RouterMode.Single, (err) => {
+              if (err) {
+                console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+              }
+            })
+          })
 
           ListItem() {
             this.settingsListItem('模型微调')
           }
           .listItemStyle()
+          .onClick(() => {
+            // future_todo: animation
+            router.pushUrl({
+              url: "pages/AiModelChange"
+            }, router.RouterMode.Single, (err) => {
+              if (err) {
+                console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+              }
+            })
+          })
 
           ListItem() {
             this.settingsListItem('PPT文档生成')
           }
           .listItemStyle()
+          .onClick(() => {
+            // future_todo: animation
+            router.pushUrl({
+              url: "pages/AiGeneratePPT"
+            }, router.RouterMode.Single, (err) => {
+              if (err) {
+                console.error(`Invoke pushUrl failed, code is ${err.code}, message is ${err.message}`);
+              }
+            })
+          })
 
           // ListItem() {
           //   this.settingsListItem('关于')

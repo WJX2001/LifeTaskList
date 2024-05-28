@@ -2,6 +2,9 @@
   "src": [
     "pages/Index",
     "pages/Guide",
-    "pages/About"
+    "pages/About",
+    "pages/AiChatComp",
+    "pages/AiModelChange",
+    "pages/AiGeneratePPT"
   ]
 }
